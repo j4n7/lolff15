@@ -10,7 +10,7 @@ This way you will be able too safely move away from your computer an return befo
 
 ## Usage
 
-1. Search in Telegram for LOLFF15 Bot. You can also use this direct link: [t.me/LOLFF15_bot](t.me/LOLFF15_bot)
+1. Search in Telegram for LOLFF15 Bot. You can also use this direct link: [t.me/LOLFF15_bot](https://t.me/LOLFF15_bot)
 
 2. Now click "START" to make LOLFF15 Bot available for you.
 
