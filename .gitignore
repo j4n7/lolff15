@@ -1,0 +1,4 @@
+*.psd
+summoner.txt
+telegram_bot_token
+pyinstaller_command
