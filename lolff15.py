@@ -123,7 +123,7 @@ def configure_user():
         with open('summoner.txt', 'w') as file:
             file.writelines([SUMMONER_NAME, '\n', TELEGRAM_ID])
 
-    print('\nLOL FF 15 is correctly configured\n')
+    print('\nLOLFF15 is correctly configured\n')
     print(f'Summonner name: {SUMMONER_NAME}')
     print(f'Telegram ID: {TELEGRAM_ID}\n')
 
@@ -154,17 +154,20 @@ def lol_main_loop():
             lol_get_game()
             status_code = lol_get_game().status_code
             if status_code == 200:
-                game_time = float(json.loads(lol_get_game().text)['gameTime'])
-                if LOL_LIVE_GAME_TIME_CURRENT == 0.0 and game_time <= LOL_LIVE_GAME_TIME_START_THRESHOLD:
-                    LOL_LIVE_GAME_TIME_START = time.time()
-                    lol_game_telegram(f'\U0001F9D9 Game started! \U000026A0 ({get_random_string(6)})')
-                    # Python unicodes: replace “+” with “000” till 9 characters and add \
-                    print(f'\n[{time.strftime("%H:%M:%S")}] Game started!')
-                else:
-                    print(f'[{time.strftime("%H:%M:%S")}] Game live!')
-                LOL_LIVE_GAME_TIME_CURRENT = game_time
-                LOL_LIVE_WAITING_MESSAGE = True
-                time.sleep(interval_time - ((time.time() - LOL_LIVE_GAME_TIME_START) % interval_time))
+                events = json.loads(lol_get_events().text)['Events']
+                game_start = True if events and 'GameStart' in [event['EventName'] for event in events] else False
+                if game_start:
+                    game_time = float(json.loads(lol_get_game().text)['gameTime'])
+                    if LOL_LIVE_GAME_TIME_CURRENT == 0.0 and game_time <= LOL_LIVE_GAME_TIME_START_THRESHOLD:
+                        LOL_LIVE_GAME_TIME_START = time.time()
+                        lol_game_telegram(f'\U0001F9D9 Game started! \U000026A0 ({get_random_string(6)})')
+                        # Python unicodes: replace “+” with “000” till 9 characters and add \
+                        print(f'\n[{time.strftime("%H:%M:%S")}] Game started!')
+                    else:
+                        print(f'[{time.strftime("%H:%M:%S")}] Game live!')
+                    LOL_LIVE_GAME_TIME_CURRENT = game_time
+                    LOL_LIVE_WAITING_MESSAGE = True
+                    time.sleep(interval_time - ((time.time() - LOL_LIVE_GAME_TIME_START) % interval_time))
         except requests.exceptions.ConnectionError:
             LOL_LIVE_GAME_TIME_CURRENT = 0.0
             LOL_LIVE_GAME_TIME_START = 0.0
